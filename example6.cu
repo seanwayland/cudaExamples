@@ -1,10 +1,8 @@
 #include <stdio.h>
-
 #include <stdio.h>
 extern "C" {
 #include "bmpfile.h"
 }
-
 
 /*Mandelbrot values*/
 #define RESOLUTION 8700.0
@@ -18,7 +16,6 @@ extern "C" {
 #define COLOUR_DEPTH 255
 #define COLOUR_MAX 240.0
 #define GRADIENT_COLOUR_MAX 230.0
-
 #define FILENAME "my_mandelbrot_fractal.bmp"
 
 void init(double *a, int N)
@@ -29,7 +26,6 @@ void init(double *a, int N)
     a[i] = 0;
   }
 }
-
 
 __global__
 void doubleElements(double *ar, int N, int color )
@@ -46,12 +42,10 @@ void doubleElements(double *ar, int N, int color )
     int xoffset = -(WIDTH - 1) /2;
     int yoffset = (HEIGHT -1) / 2;
 
-
   for (int i = idx; i < N; i += stride)
   {
 
    //// processing function
-
 
         int col = i/4;
         int row = i%4;
@@ -74,9 +68,7 @@ void doubleElements(double *ar, int N, int color )
            ++iter;
 	    a = (aold * aold) - (bold * bold) + x;
         b = 2.0 * aold*bold + y;
-
            zmagsqr = a*a + b*b;
-
            aold = a;
            bold = b;
 
@@ -90,7 +82,6 @@ void doubleElements(double *ar, int N, int color )
 
         double posSlope = (COLOUR_DEPTH- 1)/60;
         double negSlope = (1-COLOUR_DEPTH)/60;
-
           if ( color == 0)
           {
 
@@ -120,7 +111,6 @@ void doubleElements(double *ar, int N, int color )
                 }
 
            }
-
            if ( color == 1 )
                 {
 
@@ -149,9 +139,6 @@ void doubleElements(double *ar, int N, int color )
                         ar[i] = 1;
                     }
                 }
-
-
-
                   if ( color == 2)
                   {
 
@@ -181,8 +168,6 @@ void doubleElements(double *ar, int N, int color )
                         ar[2] = negSlope*x+6*COLOUR_DEPTH;
                     }
                 }
-
-
   }
 
 }
@@ -225,14 +210,13 @@ int main()
         int ii = yy * WIDTH + xx;
         pixel.red = red[ii];
         pixel.green = blue[ii];
-	    pixel.blue = green[ii];
+	pixel.blue = green[ii];
         bmp_set_pixel(bmp, xx, yy, pixel);
         }
      }
 
   bmp_save(bmp, FILENAME);
   bmp_destroy(bmp);
-
 
   cudaFree(red);
   cudaFree(green);
