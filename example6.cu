@@ -196,8 +196,8 @@ int main()
   size_t number_of_blocks = 32;
 
   doubleElements<<<number_of_blocks, threads_per_block>>>(red, N, 0);
-  doubleElements<<<number_of_blocks, threads_per_block>>>(blue, N, 1);
-  doubleElements<<<number_of_blocks, threads_per_block>>>(green, N, 2);
+  doubleElements<<<number_of_blocks, threads_per_block>>>(green, N, 1);
+  doubleElements<<<number_of_blocks, threads_per_block>>>(blue, N, 2);
   cudaDeviceSynchronize();
 
 // now we have red blue green in 3 arrays and hopefully index of arrays is based on x,y values
@@ -209,8 +209,8 @@ int main()
         // i is get i from x , y
         int ii = yy * WIDTH + xx;
         pixel.red = red[ii];
-        pixel.green = blue[ii];
-	pixel.blue = green[ii];
+        pixel.green = green[ii];
+	pixel.blue = blue[ii];
         bmp_set_pixel(bmp, xx, yy, pixel);
         }
      }
@@ -222,4 +222,3 @@ int main()
   cudaFree(green);
   cudaFree(blue);
 }
-
