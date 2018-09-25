@@ -1,7 +1,10 @@
 #include <stdio.h>
 
 #include <stdio.h>
+extern "C" {
 #include "bmpfile.h"
+}
+
 
 /*Mandelbrot values*/
 #define RESOLUTION 8700.0
