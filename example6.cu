@@ -68,7 +68,7 @@ void doubleElements(double *ar, int N, int color )
         double bold = 0;
         double zmagsqr = 0;
         int iter =0;
-	    double x_col;
+	double x_col;
         //Check if the x,y coord are part of the mendelbrot set - refer to the algorithm
         while(iter < MAX_ITER && zmagsqr <= 4.0){
            ++iter;
@@ -152,33 +152,33 @@ void doubleElements(double *ar, int N, int color )
 
 
 
-                  if ( color == 2)
+           if ( color == 2)
                   {
 
                     if ( x_col < 60 )
                     {
-                        ar[2] = 1;
+                        ar[i] = 1;
                     }
                     else if (  x_col >= 60 && x_col < 120 )
                     {
-                        ar[2] = 1;
+                        ar[i] = 1;
                     }
                     else if (  x_col >=120 && x_col < 180  )
                     {
-                        ar[2] = posSlope*x-2.0*COLOUR_DEPTH+1;
+                        ar[i] = posSlope*x-2.0*COLOUR_DEPTH+1;
                     }
 
                     else if (x_col >=180  && x_col < 240  )
                     {
-                        ar[2] = COLOUR_DEPTH;
+                        ar[i] = COLOUR_DEPTH;
                     }
                     else if (  x_col>= 240 && x_col < 300  )
                     {
-                        ar[2] = COLOUR_DEPTH;
+                        ar[i] = COLOUR_DEPTH;
                     }
                     else
                     {
-                        ar[2] = negSlope*x_col+6*COLOUR_DEPTH;
+                        ar[i] = negSlope*x_col+6*COLOUR_DEPTH;
                     }
                 }
 
