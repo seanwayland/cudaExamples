@@ -53,8 +53,8 @@ void doubleElements(double *ar, int N, int color )
    //// processing function
 
 
-        int col = i/4;
-        int row = i%4;
+        int col = i/1920;
+        int row = i%1920;
 
         //Determine where in the mandelbrot set, the pixel is referencing
         double x = XCENTER + (xoffset + col) / RESOLUTION;
