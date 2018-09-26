@@ -165,7 +165,7 @@ void doubleElements(double *ar, int N, int color )
                     }
                     else if (  x_col >=120 && x_col < 180  )
                     {
-                        ar[i] = posSlope*x-2.0*COLOUR_DEPTH+1;
+                        ar[i] = posSlope*x_col-2.0*COLOUR_DEPTH+1;
                     }
 
                     else if (x_col >=180  && x_col < 240  )
@@ -224,11 +224,11 @@ int main()
         // i is get i from x , y
         int ii = yy * WIDTH + xx;
         pixel.red = red[ii];
-        printf("r %lf ", red[ii]);
+        //printf("r %lf ", red[ii]);
         pixel.blue = blue[ii];
-        printf("b %lf ", blue[ii]);
+        //printf("b %lf ", blue[ii]);
 	pixel.green = green[ii];
-	printf("g %lf ", green[ii]);
+	//printf("g %lf ", green[ii]);
         bmp_set_pixel(bmp, xx, yy, pixel);
         }
      }
