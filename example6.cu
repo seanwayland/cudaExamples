@@ -73,7 +73,7 @@ void doubleElements(double *ar, int N, int color )
         while(iter < MAX_ITER && zmagsqr <= 4.0){
            ++iter;
 	    a = (aold * aold) - (bold * bold) + x;
-        b = 2.0 * aold*bold + y;
+            b = 2.0 * aold*bold + y;
 
            zmagsqr = a*a + b*b;
 
@@ -195,17 +195,17 @@ int main()
 
   bmp = bmp_create(WIDTH, HEIGHT, 32);
   int N = WIDTH*HEIGHT;
-  double *red;
-
   size_t size = N * sizeof(double);
+  double *red;
   cudaMallocManaged(&red, size);
   init(red, N);
-  double *green;
-  cudaMallocManaged(&green, size);
-  init(green, N);
   double *blue;
   cudaMallocManaged(&blue, size);
   init(blue, N);
+  double *green;
+  cudaMallocManaged(&green, size);
+  init(green, N);
+
 
   size_t threads_per_block = 256;
   size_t number_of_blocks = 32;
@@ -224,11 +224,11 @@ int main()
         // i is get i from x , y
         int ii = yy * WIDTH + xx;
         pixel.red = red[ii];
-        printf("r %lf", red[ii])
-        pixel.green = blue[ii];
-        printf("b %lf", blue[ii])
-	    pixel.blue = green[ii];
-	    printf("g %lf", green[ii])
+        printf("r %lf ", red[ii]);
+        pixel.blue = blue[ii];
+        printf("b %lf ", blue[ii]);
+	pixel.green = green[ii];
+	printf("g %lf ", green[ii]);
         bmp_set_pixel(bmp, xx, yy, pixel);
         }
      }
@@ -238,6 +238,6 @@ int main()
 
 
   cudaFree(red);
-  cudaFree(green);
   cudaFree(blue);
+  cudaFree(green);
 }
