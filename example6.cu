@@ -1,21 +1,24 @@
 #include <stdio.h>
+
 #include <stdio.h>
 extern "C" {
 #include "bmpfile.h"
 }
+
 
 /*Mandelbrot values*/
 #define RESOLUTION 8700.0
 #define XCENTER -0.55
 #define YCENTER 0.6
 #define MAX_ITER 1000
-#define WIDTH 50.0
-#define HEIGHT 80.0
+#define WIDTH 1920.0
+#define HEIGHT 1080.0
 
 /*Colour Values*/
 #define COLOUR_DEPTH 255
 #define COLOUR_MAX 240.0
 #define GRADIENT_COLOUR_MAX 230.0
+
 #define FILENAME "my_mandelbrot_fractal.bmp"
 
 void init(double *a, int N)
@@ -26,6 +29,7 @@ void init(double *a, int N)
     a[i] = 0;
   }
 }
+
 
 __global__
 void doubleElements(double *ar, int N, int color )
@@ -42,10 +46,12 @@ void doubleElements(double *ar, int N, int color )
     int xoffset = -(WIDTH - 1) /2;
     int yoffset = (HEIGHT -1) / 2;
 
+
   for (int i = idx; i < N; i += stride)
   {
 
    //// processing function
+
 
         int col = i/4;
         int row = i%4;
@@ -68,7 +74,9 @@ void doubleElements(double *ar, int N, int color )
            ++iter;
 	    a = (aold * aold) - (bold * bold) + x;
         b = 2.0 * aold*bold + y;
+
            zmagsqr = a*a + b*b;
+
            aold = a;
            bold = b;
 
@@ -80,8 +88,9 @@ void doubleElements(double *ar, int N, int color )
 
         x_col =  (COLOUR_MAX - (( ((float) iter / ((float) MAX_ITER) * GRADIENT_COLOUR_MAX))));
 
-        double posSlope = (COLOUR_DEPTH- 1)/60;
-        double negSlope = (1-COLOUR_DEPTH)/60;
+        double posSlope = (COLOUR_DEPTH - 1)/60;
+        double negSlope = (1- COLOUR_DEPTH)/60;
+
           if ( color == 0)
           {
 
@@ -89,21 +98,21 @@ void doubleElements(double *ar, int N, int color )
                 {
                     ar[i] = COLOUR_DEPTH;
                 }
-                if (  x_col >= 60 && x_col < 120 )
+                else if (  x_col >= 60 && x_col < 120 )
                 {
-                    ar[i] = negSlope*x+2.0*COLOUR_DEPTH+1;
+                    ar[i] = negSlope*x_col+2.0*COLOUR_DEPTH+1;
                 }
-                if (  x_col >=120 && x_col < 180  )
+                else if (  x_col >=120 && x_col < 180  )
                 {
                     ar[i] = 1;
                 }
-                if ( x_col >=180  && x_col < 240  )
+                else if ( x_col >=180  && x_col < 240  )
                 {
                     ar[i] = 1;
                 }
-                if (  x_col>= 240 && x_col < 300  )
+                else if (  x_col>= 240 && x_col < 300  )
                 {
-                    ar[i] = posSlope*x-4.0*COLOUR_DEPTH+1;
+                    ar[i] = posSlope*x_col-4.0*COLOUR_DEPTH+1;
                 }
                 else
                 {
@@ -111,6 +120,7 @@ void doubleElements(double *ar, int N, int color )
                 }
 
            }
+
            if ( color == 1 )
                 {
 
@@ -118,19 +128,19 @@ void doubleElements(double *ar, int N, int color )
                     {
                         ar[i] = posSlope*x+1;
                     }
-                    if (  x_col >= 60 && x_col < 120 )
+                    else if (  x_col >= 60 && x_col < 120 )
                     {
                         ar[i] = COLOUR_DEPTH;
                     }
-                    if (  x_col >=120 && x_col < 180  )
+                    else if (  x_col >=120 && x_col < 180  )
                     {
                         ar[i] = COLOUR_DEPTH;
                     }
-                    if ( x_col >=180  && x_col < 240  )
+                    else if ( x_col >=180  && x_col < 240  )
                     {
-                        ar[i] = negSlope*x+4.0*COLOUR_DEPTH+1;
+                        ar[i] = negSlope*x_col+4.0*COLOUR_DEPTH+1;
                     }
-                    if (  x_col>= 240 && x_col < 300  )
+                    else if (  x_col>= 240 && x_col < 300  )
                     {
                         ar[i] = 1;
                     }
@@ -139,6 +149,9 @@ void doubleElements(double *ar, int N, int color )
                         ar[i] = 1;
                     }
                 }
+
+
+
                   if ( color == 2)
                   {
 
@@ -146,28 +159,30 @@ void doubleElements(double *ar, int N, int color )
                     {
                         ar[2] = 1;
                     }
-                    if (  x_col >= 60 && x_col < 120 )
+                    else if (  x_col >= 60 && x_col < 120 )
                     {
                         ar[2] = 1;
                     }
-                    if (  x_col >=120 && x_col < 180  )
+                    else if (  x_col >=120 && x_col < 180  )
                     {
                         ar[2] = posSlope*x-2.0*COLOUR_DEPTH+1;
                     }
 
-                    if (x_col >=180  && x_col < 240  )
+                    else if (x_col >=180  && x_col < 240  )
                     {
                         ar[2] = COLOUR_DEPTH;
                     }
-                    if (  x_col>= 240 && x_col < 300  )
+                    else if (  x_col>= 240 && x_col < 300  )
                     {
                         ar[2] = COLOUR_DEPTH;
                     }
                     else
                     {
-                        ar[2] = negSlope*x+6*COLOUR_DEPTH;
+                        ar[2] = negSlope*x_col+6*COLOUR_DEPTH;
                     }
                 }
+
+
   }
 
 }
@@ -196,8 +211,8 @@ int main()
   size_t number_of_blocks = 32;
 
   doubleElements<<<number_of_blocks, threads_per_block>>>(red, N, 0);
-  doubleElements<<<number_of_blocks, threads_per_block>>>(green, N, 1);
-  doubleElements<<<number_of_blocks, threads_per_block>>>(blue, N, 2);
+  doubleElements<<<number_of_blocks, threads_per_block>>>(blue, N, 1);
+  doubleElements<<<number_of_blocks, threads_per_block>>>(green, N, 2);
   cudaDeviceSynchronize();
 
 // now we have red blue green in 3 arrays and hopefully index of arrays is based on x,y values
@@ -209,14 +224,18 @@ int main()
         // i is get i from x , y
         int ii = yy * WIDTH + xx;
         pixel.red = red[ii];
-        pixel.green = green[ii];
-	pixel.blue = blue[ii];
+        printf("r %lf", red[ii])
+        pixel.green = blue[ii];
+        printf("b %lf", blue[ii])
+	    pixel.blue = green[ii];
+	    printf("g %lf", green[ii])
         bmp_set_pixel(bmp, xx, yy, pixel);
         }
      }
 
   bmp_save(bmp, FILENAME);
   bmp_destroy(bmp);
+
 
   cudaFree(red);
   cudaFree(green);
